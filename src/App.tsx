@@ -1,26 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import type React from "react"
+import { useState } from "react"
+import Header from "./components/Header"
+import HomePage from "./pages/HomePage"
+import DocsPage from "./pages/DocsPage"
+import Footer from "./components/Footer"
+import { getStoredLanguage, setStoredLanguage } from "./utils/storage"
+import "./style.scss"
 
-function App() {
+const App: React.FC = () => {
+  const [language, setLanguage] = useState<"en" | "es" | "pt">(getStoredLanguage())
+  const [currentPage, setCurrentPage] = useState<"home" | "docs">("home")
+  const [currentDoc, setCurrentDoc] = useState<"discord" | "javascript" | "python" | "java">("discord")
+
+  const handleLanguageChange = (newLanguage: "en" | "es" | "pt") => {
+    setLanguage(newLanguage)
+    setStoredLanguage(newLanguage)
+  }
+
+  const handleSetCurrentPage = (page: "home" | "docs") => setCurrentPage(page)
+  const handleSetCurrentDoc = (doc: "discord" | "javascript" | "python" | "java") => setCurrentDoc(doc)
+
+  const translations = {
+    en: {
+      title: "Unix Timestamp Converter",
+      home: "Home",
+      docs: "Documentation",
+      languageSelector: "Select Language",
+    },
+    es: {
+      title: "Conversor de Tiempo Unix",
+      home: "Inicio",
+      docs: "Documentación",
+      languageSelector: "Seleccionar Idioma",
+    },
+    pt: {
+      title: "Conversor de Timestamp Unix",
+      home: "Início",
+      docs: "Documentação",
+      languageSelector: "Selecionar Idioma",
+    },
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header
+        logo="/img/UnixTemp512.png"
+        language={language}
+        setLanguage={handleLanguageChange}
+        translations={translations[language]}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+      {currentPage === "home" ? (
+        <HomePage language={language} setCurrentPage={handleSetCurrentPage} setCurrentDoc={handleSetCurrentDoc} />
+      ) : (
+        <DocsPage language={language} currentDoc={currentDoc} setCurrentDoc={setCurrentDoc} />
+      )}
+      <Footer language={language} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
+
