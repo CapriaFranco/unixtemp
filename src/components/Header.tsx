@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Home, FileText, Globe, ChevronDown } from "lucide-react"
+import { Home, FileText, Globe, ChevronDown, Menu, X } from "lucide-react"
 
 interface HeaderProps {
   logo: string
@@ -19,6 +19,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ logo, language, setLanguage, translations, currentPage, setCurrentPage }) => {
   const [showLanguages, setShowLanguages] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
 
   const languages = {
     en: "English",
@@ -33,13 +34,28 @@ const Header: React.FC<HeaderProps> = ({ logo, language, setLanguage, translatio
           <img src={logo || "/placeholder.svg"} alt="UnixTemp Logo" className="logo" />
         </button>
       </div>
-      <nav>
+      <button className="menu-toggle" onClick={() => setShowMenu(!showMenu)}>
+        {showMenu ? <X /> : <Menu />}
+      </button>
+      <nav className={showMenu ? "show" : ""}>
         <ul className="noselect">
-          <li onClick={() => setCurrentPage("home")} className={currentPage === "home" ? "active" : ""}>
+          <li
+            onClick={() => {
+              setCurrentPage("home")
+              setShowMenu(false)
+            }}
+            className={currentPage === "home" ? "active" : ""}
+          >
             <Home className="icon" />
             {translations.home}
           </li>
-          <li onClick={() => setCurrentPage("docs")} className={currentPage === "docs" ? "active" : ""}>
+          <li
+            onClick={() => {
+              setCurrentPage("docs")
+              setShowMenu(false)
+            }}
+            className={currentPage === "docs" ? "active" : ""}
+          >
             <FileText className="icon" />
             {translations.docs}
           </li>
@@ -58,6 +74,7 @@ const Header: React.FC<HeaderProps> = ({ logo, language, setLanguage, translatio
                 onClick={() => {
                   setLanguage(code as "en" | "es" | "pt")
                   setShowLanguages(false)
+                  setShowMenu(false)
                 }}
               >
                 {name}

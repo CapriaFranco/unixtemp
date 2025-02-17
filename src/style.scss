@@ -23,7 +23,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
-  font-size: 16px; // Reduced from 18px
+  font-size: clamp(14px, 2vw, 18px);
 }
 
 .app {
@@ -38,7 +38,7 @@ body {
 
 header {
   background-color: var(--surface-color);
-  padding: 0.75rem 2rem; // Reduced padding
+  padding: 0.35rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,13 +53,22 @@ header {
     gap: 1rem;
 
     .logo {
-      height: 50px; // Reduced from 60px
+      height: 50px;
       transition: transform var(--transition-speed) ease;
 
       &:hover {
         transform: scale(1.05);
       }
     }
+  }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
   }
 
   nav {
@@ -139,6 +148,66 @@ header {
       }
     }
   }
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+
+    nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--surface-color);
+      padding: 1rem;
+      box-shadow: var(--card-shadow);
+
+      &.show {
+        display: flex;
+        flex-direction: column;
+      }
+
+      ul {
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 1rem;
+
+        li {
+          padding: 0.5rem 0;
+        }
+      }
+
+      .language-selector {
+        width: 100%;
+
+        .selected-language {
+          justify-content: space-between;
+        }
+
+        .language-options {
+          position: static;
+          margin-top: 0.5rem;
+          opacity: 1;
+          transform: none;
+          pointer-events: all;
+          display: none;
+
+          &.show {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo-container {
+      .logo {
+        height: 40px;
+      }
+    }
+  }
 }
 
 main {
@@ -151,7 +220,7 @@ main {
   h1 {
     text-align: center;
     color: var(--primary-color);
-    font-size: 2.25rem; // Reduced from 3rem
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
     margin-bottom: 2rem;
     opacity: 0;
     transform: translateY(20px);
@@ -233,7 +302,7 @@ main {
           color: var(--text-color);
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 8px;
-          font-size: 1rem;
+          font-size: clamp(0.875rem, 2vw, 1rem);
           transition: all var(--transition-speed) ease;
 
           &:focus {
@@ -313,12 +382,12 @@ main {
       box-shadow: var(--card-shadow);
 
       h2 {
-        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-size: clamp(1.25rem, 3vw, 2rem);
         margin-bottom: 1.5rem;
         color: var(--primary-color);
       }
 
-      p {
+      p, ul li {
         font-size: clamp(0.875rem, 2vw, 1rem);
         margin-bottom: 1.5rem;
         line-height: 1.8;
@@ -336,8 +405,7 @@ main {
         padding-left: 2rem;
 
         li {
-          font-size: clamp(0.875rem, 2vw, 1rem);
-          margin-bottom: 1rem;
+          
           padding-left: 1.5rem;
           position: relative;
 
@@ -384,6 +452,7 @@ main {
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          font-size: clamp(1rem, 2.5vw, 1.25rem);
 
           .icon {
             font-size: 1.5rem;
@@ -393,6 +462,7 @@ main {
         p {
           margin-bottom: 1.5rem;
           opacity: 0.8;
+          font-size: clamp(0.875rem, 2vw, 1rem);
         }
 
         .learn-more {
@@ -498,7 +568,7 @@ footer {
         align-items: center;
         gap: 0.5rem;
         padding: 0.75rem 1.5rem;
-        background-color: var(--primary-color); // Cambiado para usar el color primario
+        background-color: var(--primary-color);
         color: white;
         text-decoration: none;
         border-radius: 8px;
@@ -506,7 +576,7 @@ footer {
         transition: all var(--transition-speed) ease;
 
         &:hover {
-          background-color: darken(#ff4136, 10%); // Oscurece el color primario al hacer hover
+          background-color: darken(#ff4136, 10%);
           transform: translateY(-2px);
         }
 
@@ -620,7 +690,7 @@ footer {
 
   main {
     h1 {
-      font-size: 2.5rem; // Reduced from 3rem
+      font-size: 2.5rem;
     }
   }
 }
@@ -632,6 +702,10 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+    @media (max-width: 768px) {
+      flex-direction: column;
+      padding: 1rem;
+    }
   }
 
   .docs-sidebar {
@@ -643,7 +717,6 @@ footer {
     height: fit-content;
     position: sticky;
     top: calc(80px + 2rem);
-
     nav {
       display: flex;
       flex-direction: column;
@@ -674,6 +747,36 @@ footer {
         }
       }
     }
+    @media (max-width: 768px) {
+      width: 100%;
+      position: static;
+      margin-bottom: 1rem;
+      padding: 1rem;
+
+      nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .sidebar-item {
+          flex: 1 1 calc(50% - 0.5rem);
+          max-width: calc(50% - 0.5rem);
+          text-align: center;
+          padding: 0.5rem;
+
+          .icon {
+            margin-right: 0.25rem;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav .sidebar-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+    }
   }
 
   .docs-content {
@@ -682,11 +785,13 @@ footer {
     border-radius: 12px;
     padding: 2rem;
     min-height: 80vh;
+    @media (max-width: 768px) {
+      padding: 1rem;
+    }
 
     h1 {
       margin-bottom: 2rem;
-      font-size: 2.5rem;
-      color: var(--primary-color);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
     }
 
     .section {
@@ -702,12 +807,13 @@ footer {
       h2 {
         color: var(--primary-color);
         margin-bottom: 1rem;
-        font-size: 1.8rem;
+        font-size: clamp(1.25rem, 3vw, 1.8rem);
       }
 
       p {
         margin-bottom: 1rem;
         line-height: 1.8;
+        font-size: clamp(0.875rem, 2vw, 1rem);
       }
 
       .code-block {
@@ -716,6 +822,7 @@ footer {
         border-radius: 8px;
         margin: 1rem 0;
         position: relative;
+        font-size: clamp(0.875rem, 2vw, 1rem);
 
         pre {
           margin: 0;
@@ -750,6 +857,7 @@ footer {
         padding: 1.5rem;
         border-radius: 8px;
         margin: 1rem 0;
+        font-size: clamp(0.875rem, 2vw, 1rem);
       }
     }
   }
@@ -769,7 +877,7 @@ footer {
     }
 
     .docs-content {
-      padding: 1.5rem;
+      padding: 1rem;
     }
   }
 }
@@ -811,5 +919,24 @@ footer {
   ul {
     padding-left: 1.5rem;
   }
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 6px;
+  border: 3px solid var(--surface-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: darken(#ff4136, 10%);
 }
 

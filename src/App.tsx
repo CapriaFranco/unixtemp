@@ -5,7 +5,6 @@ import HomePage from "./pages/HomePage"
 import DocsPage from "./pages/DocsPage"
 import Footer from "./components/Footer"
 import { getStoredLanguage, setStoredLanguage } from "./utils/storage"
-import { scrollToTop } from "./utils/scrollToTop"
 import "./style.scss"
 
 const App: React.FC = () => {
@@ -20,7 +19,7 @@ const App: React.FC = () => {
 
   const handleSetCurrentPage = (page: "home" | "docs") => {
     setCurrentPage(page)
-    scrollToTop()
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
   const handleSetCurrentDoc = (doc: "discord" | "javascript" | "python" | "java") => setCurrentDoc(doc)
 

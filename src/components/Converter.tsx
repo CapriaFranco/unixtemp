@@ -21,7 +21,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
 
   useEffect(() => {
     resetFields()
-  }, []) // Removed unnecessary dependency: isTimeToUnix
+  }, [])
 
   const resetFields = () => {
     setHour("00")
@@ -34,6 +34,15 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
     setResult("")
   }
 
+  const getDaysInMonth = (year: number, month: number) => {
+    return new Date(year, month, 0).getDate()
+  }
+
+  // Remove this function:
+  // const isLeapYear = (year: number) => {
+  //   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
+  // }
+
   const handleTimeInputChange = (value: string, setter: React.Dispatch<React.SetStateAction<string>>, max: number) => {
     if (value === "") {
       setter("00")
@@ -45,15 +54,41 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
     }
   }
 
-  const handleDateInputChange = (value: string, setter: React.Dispatch<React.SetStateAction<string>>, max: number) => {
+  const handleDateInputChange = (
+    value: string,
+    setter: React.Dispatch<React.SetStateAction<string>>,
+    maxDays: number,
+  ) => {
     if (value === "") {
-      setter(new Date().getFullYear().toString())
+      setter("01")
     } else {
       const numValue = Number.parseInt(value, 10)
       if (!isNaN(numValue)) {
-        setter(Math.min(numValue, max).toString())
+        setter(Math.min(Math.max(numValue, 1), maxDays).toString().padStart(2, "0"))
       }
     }
+  }
+
+  const handleYearChange = (value: string) => {
+    if (value === "") {
+      setYear(new Date().getFullYear().toString())
+    } else {
+      const numValue = Number.parseInt(value, 10)
+      if (!isNaN(numValue)) {
+        setYear(Math.min(Math.max(numValue, 1970), 9999).toString())
+      }
+    }
+    updateDaysInMonth(Number(value), Number(month))
+  }
+
+  const handleMonthChange = (value: string) => {
+    handleTimeInputChange(value, setMonth, 12)
+    updateDaysInMonth(Number(year), Number(value))
+  }
+
+  const updateDaysInMonth = (year: number, month: number) => {
+    const daysInMonth = getDaysInMonth(year, month)
+    setDay((prev) => Math.min(Number(prev), daysInMonth).toString().padStart(2, "0"))
   }
 
   const handleConvert = () => {
@@ -152,15 +187,32 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
             <label>{t.second}</label>
           </div>
           <div className="input-group">
-            <input type="text" value={year} onChange={(e) => handleDateInputChange(e.target.value, setYear, 9999)} />
+            <input
+              type="text"
+              value={year}
+              onChange={(e) => handleYearChange(e.target.value)}
+              onBlur={() => year === "" && setYear(new Date().getFullYear().toString())}
+            />
             <label>{t.year}</label>
           </div>
           <div className="input-group">
-            <input type="text" value={month} onChange={(e) => handleTimeInputChange(e.target.value, setMonth, 12)} />
+            <input
+              type="text"
+              value={month}
+              onChange={(e) => handleMonthChange(e.target.value)}
+              onBlur={() => month === "" && setMonth("01")}
+            />
             <label>{t.month}</label>
           </div>
           <div className="input-group">
-            <input type="text" value={day} onChange={(e) => handleTimeInputChange(e.target.value, setDay, 31)} />
+            <input
+              type="text"
+              value={day}
+              onChange={(e) =>
+                handleDateInputChange(e.target.value, setDay, getDaysInMonth(Number(year), Number(month)))
+              }
+              onBlur={() => day === "" && setDay("01")}
+            />
             <label>{t.day}</label>
           </div>
         </div>
