@@ -41,18 +41,14 @@ const DocsSidebar: React.FC<DocsSidebarProps> = ({ language, currentDoc, setCurr
         {translations[language].sections.map((section) => {
           const Icon = section.icon
           return (
-            <a
+            <button
               key={section.path}
-              href="#"
-              onClick={(e) => {
-                e.preventDefault()
-                setCurrentDoc(section.path as "discord" | "javascript" | "python" | "java")
-              }}
+              onClick={() => setCurrentDoc(section.path as "discord" | "javascript" | "python" | "java")}
               className={`sidebar-item ${currentDoc === section.path ? "active" : ""}`}
             >
               <Icon className="icon" />
               <span>{section.title}</span>
-            </a>
+            </button>
           )
         })}
       </nav>

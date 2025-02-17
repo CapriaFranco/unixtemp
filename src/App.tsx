@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage"
 import DocsPage from "./pages/DocsPage"
 import Footer from "./components/Footer"
 import { getStoredLanguage, setStoredLanguage } from "./utils/storage"
+import { scrollToTop } from "./utils/scrollToTop"
 import "./style.scss"
 
 const App: React.FC = () => {
@@ -17,7 +18,10 @@ const App: React.FC = () => {
     setStoredLanguage(newLanguage)
   }
 
-  const handleSetCurrentPage = (page: "home" | "docs") => setCurrentPage(page)
+  const handleSetCurrentPage = (page: "home" | "docs") => {
+    setCurrentPage(page)
+    scrollToTop()
+  }
   const handleSetCurrentDoc = (doc: "discord" | "javascript" | "python" | "java") => setCurrentDoc(doc)
 
   const translations = {
@@ -51,11 +55,13 @@ const App: React.FC = () => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
-      {currentPage === "home" ? (
-        <HomePage language={language} setCurrentPage={handleSetCurrentPage} setCurrentDoc={handleSetCurrentDoc} />
-      ) : (
-        <DocsPage language={language} currentDoc={currentDoc} setCurrentDoc={setCurrentDoc} />
-      )}
+      <main>
+        {currentPage === "home" ? (
+          <HomePage language={language} setCurrentPage={handleSetCurrentPage} setCurrentDoc={handleSetCurrentDoc} />
+        ) : (
+          <DocsPage language={language} currentDoc={currentDoc} setCurrentDoc={handleSetCurrentDoc} />
+        )}
+      </main>
       <Footer language={language} />
     </div>
   )

@@ -23,6 +23,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
+  font-size: 16px; // Reduced from 18px
 }
 
 .app {
@@ -37,7 +38,7 @@ body {
 
 header {
   background-color: var(--surface-color);
-  padding: 1rem 2rem;
+  padding: 0.75rem 2rem; // Reduced padding
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -52,7 +53,7 @@ header {
     gap: 1rem;
 
     .logo {
-      height: 60px; // Increased from 50px
+      height: 50px; // Reduced from 60px
       transition: transform var(--transition-speed) ease;
 
       &:hover {
@@ -70,7 +71,7 @@ header {
       display: flex;
       list-style-type: none;
       gap: 2rem;
-      
+
       li {
         display: flex;
         align-items: center;
@@ -90,7 +91,7 @@ header {
 
     .language-selector {
       position: relative;
-      
+
       .selected-language {
         display: flex;
         align-items: center;
@@ -150,7 +151,7 @@ main {
   h1 {
     text-align: center;
     color: var(--primary-color);
-    font-size: 2.5rem;
+    font-size: 2.25rem; // Reduced from 3rem
     margin-bottom: 2rem;
     opacity: 0;
     transform: translateY(20px);
@@ -181,7 +182,7 @@ main {
         background-color: rgba(255, 255, 255, 0.05);
         padding: 0.75rem 1.5rem;
         border-radius: 12px;
-        
+
         span {
           font-size: clamp(0.875rem, 2vw, 1.1rem);
           white-space: nowrap;
@@ -333,7 +334,7 @@ main {
       ul {
         list-style: none;
         padding-left: 2rem;
-        
+
         li {
           font-size: clamp(0.875rem, 2vw, 1rem);
           margin-bottom: 1rem;
@@ -343,7 +344,7 @@ main {
           &:before {
             content: '';
             position: absolute;
-            left: 0;
+            left: -1rem;
             top: 0.5rem;
             width: 6px;
             height: 6px;
@@ -401,10 +402,24 @@ main {
           color: var(--primary-color);
           text-decoration: none;
           font-weight: 500;
-          transition: gap var(--transition-speed) ease;
+          transition: all var(--transition-speed) ease;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
 
           &:hover {
+            background-color: rgba(255, 65, 54, 0.1);
             gap: 0.8rem;
+          }
+
+          .icon {
+            transition: transform var(--transition-speed) ease;
+          }
+
+          &:hover .icon {
+            transform: translateX(4px);
           }
         }
       }
@@ -430,17 +445,44 @@ footer {
       align-items: center;
       gap: 0.5rem;
 
+      .created-by {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .heart-icon {
+          margin: 0 0.25rem;
+        }
+
+        .author-link {
+          color: var(--primary-color);
+          text-decoration: none;
+          font-weight: 500;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
       .social-links {
         display: flex;
         gap: 1rem;
-        
-        a {
+
+        .github-link {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
           color: var(--text-color);
           text-decoration: none;
           transition: color var(--transition-speed) ease;
-          
+
           &:hover {
             color: var(--primary-color);
+          }
+
+          .icon {
+            font-size: 1.2rem;
           }
         }
       }
@@ -456,7 +498,7 @@ footer {
         align-items: center;
         gap: 0.5rem;
         padding: 0.75rem 1.5rem;
-        background-color: #0070ba;
+        background-color: var(--primary-color); // Cambiado para usar el color primario
         color: white;
         text-decoration: none;
         border-radius: 8px;
@@ -464,7 +506,7 @@ footer {
         transition: all var(--transition-speed) ease;
 
         &:hover {
-          background-color: #005ea6;
+          background-color: darken(#ff4136, 10%); // Oscurece el color primario al hacer hover
           transform: translateY(-2px);
         }
 
@@ -501,6 +543,8 @@ footer {
     padding: 1rem;
     flex-direction: column;
     gap: 1rem;
+    max-width: 100%;
+    margin: 0 auto;
 
     nav {
       width: 100%;
@@ -535,7 +579,7 @@ footer {
         .toggle-container {
           flex-direction: column;
           padding: 1rem;
-          
+
           span {
             text-align: center;
           }
@@ -576,7 +620,7 @@ footer {
 
   main {
     h1 {
-      font-size: 3rem;
+      font-size: 2.5rem; // Reduced from 3rem
     }
   }
 }
@@ -591,10 +635,10 @@ footer {
   }
 
   .docs-sidebar {
-    width: 250px;
+    width: 280px;
     flex-shrink: 0;
     background-color: var(--surface-color);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 1rem;
     height: fit-content;
     position: sticky;
@@ -614,9 +658,10 @@ footer {
         text-decoration: none;
         border-radius: 8px;
         transition: all var(--transition-speed) ease;
+        background-color: rgba(255, 255, 255, 0.05);
 
         &:hover {
-          background-color: rgba(255, 255, 255, 0.05);
+          background-color: rgba(255, 255, 255, 0.1);
         }
 
         &.active {
@@ -726,6 +771,45 @@ footer {
     .docs-content {
       padding: 1.5rem;
     }
+  }
+}
+
+.logo-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform var(--transition-speed) ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.discord-docs {
+  ul {
+    padding-left: 1.5rem;
   }
 }
 

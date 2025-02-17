@@ -31,16 +31,21 @@ const Footer: React.FC<FooterProps> = ({ language }) => {
     <footer>
       <div className="footer-content">
         <div className="copyright noselect">
-          <div>
+          <div className="created-by">
             <span>{t.copyright}</span>
-            <Heart className="icon" color="#ff4136" />
+            <Heart className="icon heart-icon" color="#ff4136" />
             <span>{t.by}</span>
-          </div>
-          <div className="social-links">
-            <a href="https://www.instagram.com/capria_franco" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.instagram.com/capria_franco"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="author-link"
+            >
               @capria_franco
             </a>
-            <a href="https://github.com/capriafranco" target="_blank" rel="noopener noreferrer">
+          </div>
+          <div className="social-links">
+            <a href="https://github.com/capriafranco" target="_blank" rel="noopener noreferrer" className="github-link">
               <Github className="icon" />
               capriafranco
             </a>

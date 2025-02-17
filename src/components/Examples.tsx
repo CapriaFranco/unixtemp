@@ -1,10 +1,11 @@
 import type React from "react"
 import { Code, Terminal, Coffee, MessageSquare, ArrowRight } from "lucide-react"
+import { scrollToTop } from "../utils/scrollToTop"
 
 interface ExamplesProps {
   language: "en" | "es" | "pt"
-  setCurrentPage: (page: string) => void
-  setCurrentDoc: (doc: string) => void
+  setCurrentPage: (page: "home" | "docs") => void
+  setCurrentDoc: (doc: "discord" | "javascript" | "python" | "java") => void
 }
 
 const Examples: React.FC<ExamplesProps> = ({ language, setCurrentPage, setCurrentDoc }) => {
@@ -106,6 +107,7 @@ const Examples: React.FC<ExamplesProps> = ({ language, setCurrentPage, setCurren
   const handleExampleClick = (path: string) => {
     setCurrentPage("docs")
     setCurrentDoc(path as "discord" | "javascript" | "python" | "java")
+    scrollToTop()
   }
 
   return (

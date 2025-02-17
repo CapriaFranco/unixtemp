@@ -29,9 +29,9 @@ const Header: React.FC<HeaderProps> = ({ logo, language, setLanguage, translatio
   return (
     <header>
       <div className="logo-container noselect">
-        <a href="#" onClick={() => setCurrentPage("home")}>
+        <button onClick={() => setCurrentPage("home")} className="logo-button">
           <img src={logo || "/placeholder.svg"} alt="UnixTemp Logo" className="logo" />
-        </a>
+        </button>
       </div>
       <nav>
         <ul className="noselect">
