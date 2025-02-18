@@ -1,46 +1,82 @@
-# Getting Started with Create React App
+# ![logo](/public/img/UnixTemp32.png) UnixTemp - Unix Timestamp Converter
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="end">
+  <a href="README.es-latam.md">
+    <img src="https://img.shields.io/badge/Versi%C3%B3n_en_Espa%C3%B1ol-009?style=for-the-badge&logo=googletranslate&logoColor=2af1f1" alt="Versión en Español">
+  </a>
+  <a href="README.pt-br.md">
+    <img src="https://img.shields.io/badge/Vers%C3%A3o_em_Portugu%C3%AAs-009?style=for-the-badge&logo=googletranslate&logoColor=2af1f1" alt="Versão em Português">
+  </a>
+</div>
 
-## Available Scripts
+## 🌍 About
 
-In the project directory, you can run:
+**UnixTemp** is a web application designed to convert Unix timestamps to human-readable dates and vice versa. It provides an intuitive interface with multiple conversion options, multilingual support, and a public API for integration across various programming languages.
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+✅ **Time Conversion:**  
+  - From **Unix** to human-readable date formats  
+  - From **dates** to **Unix**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+✅ **Automatic Timezone Detection** with manual override
 
-### `npm test`
+✅ **Public API** for programmatic conversion  
+  - Send and receive timestamps with configurable formats  
+  - Supports `UTC`, `ISO 8601`, `Readable`, etc.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+✅ **Multilingual Support:**  
+  - 🇺🇸 English (US)  
+  - 🇪🇸 Spanish (Latam)  
+  - 🇧🇷 Portuguese (BR)
 
-### `npm run build`
+✅ **Responsive Interface** for desktops and mobile devices
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+✅ **Comprehensive Documentation** with examples in **JavaScript, TypeScript, Python, Java, and Discord**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Technologies Used
 
-### `npm run eject`
+| Technology | Description |
+|------------|-------------|
+| ![React](https://img.shields.io/badge/-React-202EC7?style=for-the-badge&logo=react&logoColor=white) | Main library for the interface |
+| ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) | Strong typing for reliable code |
+| ![SCSS](https://img.shields.io/badge/-SCSS-C76494?style=for-the-badge&logo=sass&logoColor=white) | Advanced styling for the UI |
+| ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) | Backend for the API |
+| ![Vercel](https://img.shields.io/badge/-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white) | Deployment platform |
+| ![VSCode](https://img.shields.io/badge/-VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white) | Primary code editor |
+| ![JSON](https://img.shields.io/badge/-JSON-000000?style=for-the-badge&logo=json&logoColor=white) | Data format used in the API |
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🔗 API
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The API allows you to perform timestamp conversions programmatically.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 🔹 **Usage Example**
 
-## Learn More
+```sh
+GET https://api.unix-temp.vercel.app/convert?type=time&format={user.format}&value={user.value}
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+📌 **Parameters:**  
+- `type=` **time** (to convert from Unix) or **unix** (to convert to Unix)  
+- `format=` **utc**, **readable**, **iso8601**, **unix**  
+- `value=` **timestamp or date**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+📌 **Response:**  
+```json
+{
+  "original": "1700000000",
+  "converted": "2023-11-14T12:00:00Z",
+  "format": "ISO 8601"
+}
+```
+
+---
+
+## 📬 Contact
+
+If you have any questions, suggestions, or would like to contribute, please open an **issue** or contact:  
+📧 **capriadeveloper@email.com**

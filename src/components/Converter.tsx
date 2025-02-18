@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ArrowLeftRight } from "lucide-react"
 
 interface ConverterProps {
@@ -19,86 +19,92 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
   const [unixTimestamp, setUnixTimestamp] = useState("")
   const [result, setResult] = useState("")
 
-  useEffect(() => {
-    resetFields()
-  }, [])
-
-  const resetFields = () => {
-    setHour("00")
-    setMinute("00")
-    setSecond("00")
-    setYear(new Date().getFullYear().toString())
-    setMonth((new Date().getMonth() + 1).toString().padStart(2, "0"))
-    setDay(new Date().getDate().toString().padStart(2, "0"))
-    setUnixTimestamp("")
-    setResult("")
-  }
-
   const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month, 0).getDate()
   }
 
-  // Remove this function:
-  // const isLeapYear = (year: number) => {
-  //   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
-  // }
-
   const handleTimeInputChange = (value: string, setter: React.Dispatch<React.SetStateAction<string>>, max: number) => {
     if (value === "") {
-      setter("00")
-    } else {
-      const numValue = Number.parseInt(value, 10)
-      if (!isNaN(numValue)) {
-        setter(Math.min(numValue, max).toString().padStart(2, "0"))
-      }
+      setter("")
+      return
+    }
+
+    const numValue = Number.parseInt(value, 10)
+    if (!isNaN(numValue)) {
+      setter(Math.min(numValue, max).toString().padStart(2, "0"))
     }
   }
 
   const handleDateInputChange = (
     value: string,
     setter: React.Dispatch<React.SetStateAction<string>>,
-    maxDays: number,
+    min: number,
+    max: number,
   ) => {
     if (value === "") {
-      setter("01")
-    } else {
-      const numValue = Number.parseInt(value, 10)
-      if (!isNaN(numValue)) {
-        setter(Math.min(Math.max(numValue, 1), maxDays).toString().padStart(2, "0"))
-      }
+      setter("")
+      return
+    }
+
+    const numValue = Number.parseInt(value, 10)
+    if (!isNaN(numValue)) {
+      const clampedValue = Math.min(Math.max(numValue, min), max)
+      setter(clampedValue.toString().padStart(2, "0"))
     }
   }
 
   const handleYearChange = (value: string) => {
     if (value === "") {
-      setYear(new Date().getFullYear().toString())
-    } else {
-      const numValue = Number.parseInt(value, 10)
-      if (!isNaN(numValue)) {
-        setYear(Math.min(Math.max(numValue, 1970), 9999).toString())
-      }
+      setYear("")
+      return
+    }
+
+    const numValue = Number.parseInt(value, 10)
+    if (!isNaN(numValue)) {
+      setYear(numValue.toString())
     }
     updateDaysInMonth(Number(value), Number(month))
   }
 
   const handleMonthChange = (value: string) => {
-    handleTimeInputChange(value, setMonth, 12)
-    updateDaysInMonth(Number(year), Number(value))
+    if (value === "") {
+      setMonth("")
+      return
+    }
+
+    const numValue = Number.parseInt(value, 10)
+    if (!isNaN(numValue)) {
+      const clampedValue = Math.min(Math.max(numValue, 1), 12)
+      setMonth(clampedValue.toString().padStart(2, "0"))
+      updateDaysInMonth(Number(year), clampedValue)
+    }
   }
 
   const updateDaysInMonth = (year: number, month: number) => {
     const daysInMonth = getDaysInMonth(year, month)
-    setDay((prev) => Math.min(Number(prev), daysInMonth).toString().padStart(2, "0"))
+    setDay((prev) => {
+      const currentDay = Number(prev)
+      return Math.min(currentDay, daysInMonth).toString().padStart(2, "0")
+    })
   }
 
   const handleConvert = () => {
     if (isTimeToUnix) {
       const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`)
-      const unix = Math.floor(date.getTime() / 1000)
-      setResult(unix.toString())
+      if (!isNaN(date.getTime())) {
+        const unix = Math.floor(date.getTime() / 1000)
+        setResult(unix.toString())
+      } else {
+        setResult("Invalid date")
+      }
     } else {
-      const date = new Date(Number.parseInt(unixTimestamp) * 1000)
-      setResult(date.toLocaleString(language))
+      const timestamp = Number.parseInt(unixTimestamp)
+      if (!isNaN(timestamp)) {
+        const date = new Date(timestamp * 1000)
+        setResult(date.toLocaleString(language))
+      } else {
+        setResult("Invalid Unix timestamp")
+      }
     }
   }
 
@@ -191,6 +197,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
               type="text"
               value={year}
               onChange={(e) => handleYearChange(e.target.value)}
+              onFocus={() => setYear("")}
               onBlur={() => year === "" && setYear(new Date().getFullYear().toString())}
             />
             <label>{t.year}</label>
@@ -200,6 +207,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
               type="text"
               value={month}
               onChange={(e) => handleMonthChange(e.target.value)}
+              onFocus={() => setMonth("")}
               onBlur={() => month === "" && setMonth("01")}
             />
             <label>{t.month}</label>
@@ -209,8 +217,9 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
               type="text"
               value={day}
               onChange={(e) =>
-                handleDateInputChange(e.target.value, setDay, getDaysInMonth(Number(year), Number(month)))
+                handleDateInputChange(e.target.value, setDay, 1, getDaysInMonth(Number(year), Number(month)))
               }
+              onFocus={() => setDay("")}
               onBlur={() => day === "" && setDay("01")}
             />
             <label>{t.day}</label>

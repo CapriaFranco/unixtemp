@@ -1,5 +1,8 @@
+"use client"
+
 import type React from "react"
-import { MessageSquare, Code, Terminal, Coffee } from "lucide-react"
+import { useState } from "react"
+import { MessageSquare, Code, Terminal, Coffee, ChevronDown } from "lucide-react"
 
 interface DocsSidebarProps {
   language: "en" | "es" | "pt"
@@ -8,6 +11,8 @@ interface DocsSidebarProps {
 }
 
 const DocsSidebar: React.FC<DocsSidebarProps> = ({ language, currentDoc, setCurrentDoc }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
   const translations = {
     en: {
       sections: [
@@ -35,9 +40,11 @@ const DocsSidebar: React.FC<DocsSidebarProps> = ({ language, currentDoc, setCurr
     },
   }
 
+  const currentSection = translations[language].sections.find((section) => section.path === currentDoc)
+
   return (
     <div className="docs-sidebar">
-      <nav>
+      <nav className="desktop-nav">
         {translations[language].sections.map((section) => {
           const Icon = section.icon
           return (
@@ -52,6 +59,30 @@ const DocsSidebar: React.FC<DocsSidebarProps> = ({ language, currentDoc, setCurr
           )
         })}
       </nav>
+      <div className="mobile-nav">
+        <button className="selected-doc" onClick={() => setIsOpen(!isOpen)}>
+          {currentSection && <currentSection.icon className="icon" />}
+          <span>{currentSection?.title}</span>
+          <ChevronDown className={`chevron ${isOpen ? "open" : ""}`} />
+        </button>
+        {isOpen && (
+          <div className="doc-options">
+            {translations[language].sections.map((section) => (
+              <button
+                key={section.path}
+                className={`option ${currentDoc === section.path ? "active" : ""}`}
+                onClick={() => {
+                  setCurrentDoc(section.path as "discord" | "javascript" | "python" | "java")
+                  setIsOpen(false)
+                }}
+              >
+                <section.icon className="icon" />
+                {section.title}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

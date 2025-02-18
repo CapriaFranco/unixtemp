@@ -1,5 +1,7 @@
+"use client"
+
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Header from "./components/Header"
 import HomePage from "./pages/HomePage"
 import DocsPage from "./pages/DocsPage"
@@ -19,7 +21,7 @@ const App: React.FC = () => {
 
   const handleSetCurrentPage = (page: "home" | "docs") => {
     setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    window.scrollTo(0, 0)
   }
   const handleSetCurrentDoc = (doc: "discord" | "javascript" | "python" | "java") => setCurrentDoc(doc)
 
@@ -43,6 +45,10 @@ const App: React.FC = () => {
       languageSelector: "Selecionar Idioma",
     },
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div className="app">
