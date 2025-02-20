@@ -7,12 +7,14 @@ import HomePage from "./pages/HomePage"
 import DocsPage from "./pages/DocsPage"
 import Footer from "./components/Footer"
 import { getStoredLanguage, setStoredLanguage } from "./utils/storage"
+import { detectUserGMT } from "./utils/regions"
 import "./style.scss"
 
 const App: React.FC = () => {
   const [language, setLanguage] = useState<"en" | "es" | "pt">(getStoredLanguage())
   const [currentPage, setCurrentPage] = useState<"home" | "docs">("home")
   const [currentDoc, setCurrentDoc] = useState<"discord" | "javascript" | "python" | "java">("discord")
+  const userGMT = detectUserGMT()
 
   const handleLanguageChange = (newLanguage: "en" | "es" | "pt") => {
     setLanguage(newLanguage)
@@ -59,6 +61,7 @@ const App: React.FC = () => {
         translations={translations[language]}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        userGMT={userGMT}
       />
       <main>
         {currentPage === "home" ? (

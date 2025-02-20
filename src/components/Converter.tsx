@@ -1,8 +1,11 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { ArrowLeftRight } from "lucide-react"
+import LiveUnixCounter from "./LiveUnixCounter"
+import TimeTable from "./TimeTable"
+import DynamicRelativeTime from "./DynamicRelativeTime"
 
 interface ConverterProps {
   language: "en" | "es" | "pt"
@@ -17,96 +20,106 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
   const [month, setMonth] = useState((new Date().getMonth() + 1).toString().padStart(2, "0"))
   const [day, setDay] = useState(new Date().getDate().toString().padStart(2, "0"))
   const [unixTimestamp, setUnixTimestamp] = useState("")
-  const [result, setResult] = useState("")
 
-  const getDaysInMonth = (year: number, month: number) => {
+  const [convertedTimestamp, setConvertedTimestamp] = useState<number | null>(null)
+
+  const getDaysInMonth = useCallback((year: number, month: number) => {
     return new Date(year, month, 0).getDate()
-  }
+  }, [])
 
-  const handleTimeInputChange = (value: string, setter: React.Dispatch<React.SetStateAction<string>>, max: number) => {
-    if (value === "") {
-      setter("")
-      return
-    }
+  const handleTimeInputChange = useCallback(
+    (value: string, setter: React.Dispatch<React.SetStateAction<string>>, max: number) => {
+      if (value === "") {
+        setter("")
+        return
+      }
 
-    const numValue = Number.parseInt(value, 10)
-    if (!isNaN(numValue)) {
-      setter(Math.min(numValue, max).toString().padStart(2, "0"))
-    }
-  }
+      const numValue = Number.parseInt(value, 10)
+      if (!isNaN(numValue)) {
+        setter(Math.min(numValue, max).toString().padStart(2, "0"))
+      }
+    },
+    [],
+  )
 
-  const handleDateInputChange = (
-    value: string,
-    setter: React.Dispatch<React.SetStateAction<string>>,
-    min: number,
-    max: number,
-  ) => {
-    if (value === "") {
-      setter("")
-      return
-    }
+  const handleDateInputChange = useCallback(
+    (value: string, setter: React.Dispatch<React.SetStateAction<string>>, min: number, max: number) => {
+      if (value === "") {
+        setter("")
+        return
+      }
 
-    const numValue = Number.parseInt(value, 10)
-    if (!isNaN(numValue)) {
-      const clampedValue = Math.min(Math.max(numValue, min), max)
-      setter(clampedValue.toString().padStart(2, "0"))
-    }
-  }
+      const numValue = Number.parseInt(value, 10)
+      if (!isNaN(numValue)) {
+        const clampedValue = Math.min(Math.max(numValue, min), max)
+        setter(clampedValue.toString().padStart(2, "0"))
+      }
+    },
+    [],
+  )
 
-  const handleYearChange = (value: string) => {
-    if (value === "") {
-      setYear("")
-      return
-    }
+  const updateDaysInMonth = useCallback(
+    (year: number, month: number) => {
+      const daysInMonth = getDaysInMonth(year, month)
+      setDay((prev) => {
+        const currentDay = Number(prev)
+        return Math.min(currentDay, daysInMonth).toString().padStart(2, "0")
+      })
+    },
+    [getDaysInMonth],
+  )
 
-    const numValue = Number.parseInt(value, 10)
-    if (!isNaN(numValue)) {
-      setYear(numValue.toString())
-    }
-    updateDaysInMonth(Number(value), Number(month))
-  }
+  const handleYearChange = useCallback(
+    (value: string) => {
+      if (value === "") {
+        setYear("")
+        return
+      }
 
-  const handleMonthChange = (value: string) => {
-    if (value === "") {
-      setMonth("")
-      return
-    }
+      const numValue = Number.parseInt(value, 10)
+      if (!isNaN(numValue)) {
+        setYear(numValue.toString())
+        updateDaysInMonth(numValue, Number(month))
+      }
+    },
+    [month, updateDaysInMonth],
+  )
 
-    const numValue = Number.parseInt(value, 10)
-    if (!isNaN(numValue)) {
-      const clampedValue = Math.min(Math.max(numValue, 1), 12)
-      setMonth(clampedValue.toString().padStart(2, "0"))
-      updateDaysInMonth(Number(year), clampedValue)
-    }
-  }
+  const handleMonthChange = useCallback(
+    (value: string) => {
+      if (value === "") {
+        setMonth("")
+        return
+      }
 
-  const updateDaysInMonth = (year: number, month: number) => {
-    const daysInMonth = getDaysInMonth(year, month)
-    setDay((prev) => {
-      const currentDay = Number(prev)
-      return Math.min(currentDay, daysInMonth).toString().padStart(2, "0")
-    })
-  }
+      const numValue = Number.parseInt(value, 10)
+      if (!isNaN(numValue)) {
+        const clampedValue = Math.min(Math.max(numValue, 1), 12)
+        setMonth(clampedValue.toString().padStart(2, "0"))
+        updateDaysInMonth(Number(year), clampedValue)
+      }
+    },
+    [year, updateDaysInMonth],
+  )
 
-  const handleConvert = () => {
+  const getTimestamp = useCallback(() => {
     if (isTimeToUnix) {
-      const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`)
-      if (!isNaN(date.getTime())) {
-        const unix = Math.floor(date.getTime() / 1000)
-        setResult(unix.toString())
-      } else {
-        setResult("Invalid date")
+      const localDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`)
+      if (!isNaN(localDate.getTime())) {
+        return Math.floor(localDate.getTime() / 1000)
       }
     } else {
       const timestamp = Number.parseInt(unixTimestamp)
       if (!isNaN(timestamp)) {
-        const date = new Date(timestamp * 1000)
-        setResult(date.toLocaleString(language))
-      } else {
-        setResult("Invalid Unix timestamp")
+        return timestamp
       }
     }
-  }
+    return Math.floor(Date.now() / 1000)
+  }, [isTimeToUnix, year, month, day, hour, minute, second, unixTimestamp])
+
+  useEffect(() => {
+    setConvertedTimestamp(getTimestamp())
+  }, [getTimestamp])
 
   const translations = {
     en: {
@@ -119,7 +132,6 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
       month: "Month",
       day: "Day",
       unixTimestamp: "Unix Timestamp",
-      convert: "Convert",
     },
     es: {
       timeToUnix: "Tiempo a Unix",
@@ -131,7 +143,6 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
       month: "Mes",
       day: "Día",
       unixTimestamp: "Timestamp Unix",
-      convert: "Convertir",
     },
     pt: {
       timeToUnix: "Tempo para Unix",
@@ -143,7 +154,6 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
       month: "Mês",
       day: "Dia",
       unixTimestamp: "Timestamp Unix",
-      convert: "Converter",
     },
   }
 
@@ -151,6 +161,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
 
   return (
     <div className="converter">
+      <LiveUnixCounter language={language} />
       <div className="converter-toggle">
         <div className="toggle-container">
           <span>{t.timeToUnix}</span>
@@ -172,6 +183,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
             />
             <label>{t.hour}</label>
           </div>
+          <span className="separator colon">:</span>
           <div className="input-group">
             <input
               type="text"
@@ -182,6 +194,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
             />
             <label>{t.minute}</label>
           </div>
+          <span className="separator colon">:</span>
           <div className="input-group">
             <input
               type="text"
@@ -192,6 +205,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
             />
             <label>{t.second}</label>
           </div>
+          <span className="separator divider">|</span>
           <div className="input-group">
             <input
               type="text"
@@ -202,6 +216,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
             />
             <label>{t.year}</label>
           </div>
+          <span className="separator slash">/</span>
           <div className="input-group">
             <input
               type="text"
@@ -212,6 +227,7 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
             />
             <label>{t.month}</label>
           </div>
+          <span className="separator slash">/</span>
           <div className="input-group">
             <input
               type="text"
@@ -235,8 +251,12 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
           />
         </div>
       )}
-      <button onClick={handleConvert}>{t.convert}</button>
-      {result && <div className="result">{result}</div>}
+      {convertedTimestamp && (
+        <>
+          <TimeTable timestamp={convertedTimestamp} language={language} />
+          <DynamicRelativeTime timestamp={convertedTimestamp} language={language} />
+        </>
+      )}
     </div>
   )
 }
