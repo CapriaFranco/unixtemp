@@ -25,3 +25,11 @@
 - Mejora en la descripción de los formatos.
 - Mejoras estéticas adicionales en el sitio web, incluyendo un cuadro de unidad de tiempo.
 - Añadido el nombre del sitio al header.
+
+### v1.4.0 - 20-02-2025
+- Se añadido documentacion.
+
+### v1.5.0 - 21-02-2025
+- Se mejoro el `GTM (local)` incluyendo a los que tienen diferencia de 30m-40m con representacion de .50 y .75
+- Rediseño del header.
+- Ajustes en Docs y Api.
