@@ -173,72 +173,76 @@ const Converter: React.FC<ConverterProps> = ({ language }) => {
       </div>
       {isTimeToUnix ? (
         <div className="time-inputs">
-          <div className="input-group">
-            <input
-              type="text"
-              value={hour}
-              onChange={(e) => handleTimeInputChange(e.target.value, setHour, 23)}
-              onFocus={() => setHour("")}
-              onBlur={() => hour === "" && setHour("00")}
-            />
-            <label>{t.hour}</label>
-          </div>
-          <span className="separator colon">:</span>
-          <div className="input-group">
-            <input
-              type="text"
-              value={minute}
-              onChange={(e) => handleTimeInputChange(e.target.value, setMinute, 59)}
-              onFocus={() => setMinute("")}
-              onBlur={() => minute === "" && setMinute("00")}
-            />
-            <label>{t.minute}</label>
-          </div>
-          <span className="separator colon">:</span>
-          <div className="input-group">
-            <input
-              type="text"
-              value={second}
-              onChange={(e) => handleTimeInputChange(e.target.value, setSecond, 59)}
-              onFocus={() => setSecond("")}
-              onBlur={() => second === "" && setSecond("00")}
-            />
-            <label>{t.second}</label>
+          <div className="time-group">
+            <div className="input-group">
+              <input
+                type="text"
+                value={hour}
+                onChange={(e) => handleTimeInputChange(e.target.value, setHour, 23)}
+                onFocus={() => setHour("")}
+                onBlur={() => hour === "" && setHour("00")}
+              />
+              <label>{t.hour}</label>
+            </div>
+            <span className="separator colon">:</span>
+            <div className="input-group">
+              <input
+                type="text"
+                value={minute}
+                onChange={(e) => handleTimeInputChange(e.target.value, setMinute, 59)}
+                onFocus={() => setMinute("")}
+                onBlur={() => minute === "" && setMinute("00")}
+              />
+              <label>{t.minute}</label>
+            </div>
+            <span className="separator colon">:</span>
+            <div className="input-group">
+              <input
+                type="text"
+                value={second}
+                onChange={(e) => handleTimeInputChange(e.target.value, setSecond, 59)}
+                onFocus={() => setSecond("")}
+                onBlur={() => second === "" && setSecond("00")}
+              />
+              <label>{t.second}</label>
+            </div>
           </div>
           <span className="separator divider">|</span>
-          <div className="input-group">
-            <input
-              type="text"
-              value={year}
-              onChange={(e) => handleYearChange(e.target.value)}
-              onFocus={() => setYear("")}
-              onBlur={() => year === "" && setYear(new Date().getFullYear().toString())}
-            />
-            <label>{t.year}</label>
-          </div>
-          <span className="separator slash">/</span>
-          <div className="input-group">
-            <input
-              type="text"
-              value={month}
-              onChange={(e) => handleMonthChange(e.target.value)}
-              onFocus={() => setMonth("")}
-              onBlur={() => month === "" && setMonth("01")}
-            />
-            <label>{t.month}</label>
-          </div>
-          <span className="separator slash">/</span>
-          <div className="input-group">
-            <input
-              type="text"
-              value={day}
-              onChange={(e) =>
-                handleDateInputChange(e.target.value, setDay, 1, getDaysInMonth(Number(year), Number(month)))
-              }
-              onFocus={() => setDay("")}
-              onBlur={() => day === "" && setDay("01")}
-            />
-            <label>{t.day}</label>
+          <div className="date-group">
+            <div className="input-group">
+              <input
+                type="text"
+                value={year}
+                onChange={(e) => handleYearChange(e.target.value)}
+                onFocus={() => setYear("")}
+                onBlur={() => year === "" && setYear(new Date().getFullYear().toString())}
+              />
+              <label>{t.year}</label>
+            </div>
+            <span className="separator slash">/</span>
+            <div className="input-group">
+              <input
+                type="text"
+                value={month}
+                onChange={(e) => handleMonthChange(e.target.value)}
+                onFocus={() => setMonth("")}
+                onBlur={() => month === "" && setMonth("01")}
+              />
+              <label>{t.month}</label>
+            </div>
+            <span className="separator slash">/</span>
+            <div className="input-group">
+              <input
+                type="text"
+                value={day}
+                onChange={(e) =>
+                  handleDateInputChange(e.target.value, setDay, 1, getDaysInMonth(Number(year), Number(month)))
+                }
+                onFocus={() => setDay("")}
+                onBlur={() => day === "" && setDay("01")}
+              />
+              <label>{t.day}</label>
+            </div>
           </div>
         </div>
       ) : (

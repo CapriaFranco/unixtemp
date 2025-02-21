@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
-import { Globe, Clock, Home, FileText, Code } from "lucide-react"
+import { useState } from "react"
+import { Globe, Clock, Home, FileText, Code, Menu, X } from "lucide-react"
 
 interface HeaderProps {
   logo: string
@@ -29,13 +29,7 @@ const Header: React.FC<HeaderProps> = ({
   userGMT,
 }) => {
   const [showLanguages, setShowLanguages] = useState(false)
-  const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0)
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth)
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const languages = {
     en: "English",
@@ -49,85 +43,75 @@ const Header: React.FC<HeaderProps> = ({
         <div className="header-row">
           <div className="logo-section">
             <img src={logo || "/placeholder.svg"} alt="UnixTemp Logo" className="logo" />
-            {windowWidth > 500 && <span className="site-name">UnixTemp</span>}
+            <span className="site-name">UnixTemp</span>
           </div>
-          <nav className="nav-section">
+          <nav className={`nav-section ${mobileMenuOpen ? "mobile-open" : ""}`}>
             <div className="pages-nav">
-              <button onClick={() => setCurrentPage("home")} className={currentPage === "home" ? "active" : ""}>
+              <button
+                onClick={() => {
+                  setCurrentPage("home")
+                  setMobileMenuOpen(false)
+                }}
+                className={currentPage === "home" ? "active" : ""}
+              >
                 <Home className="icon" size={18} />
                 {translations.home}
               </button>
-              <button onClick={() => setCurrentPage("docs")} className={currentPage === "docs" ? "active" : ""}>
+              <button
+                onClick={() => {
+                  setCurrentPage("docs")
+                  setMobileMenuOpen(false)
+                }}
+                className={currentPage === "docs" ? "active" : ""}
+              >
                 <FileText className="icon" size={18} />
                 {translations.docs}
               </button>
-              <button onClick={() => setCurrentPage("api")} className={currentPage === "api" ? "active" : ""}>
+              <button
+                onClick={() => {
+                  setCurrentPage("api")
+                  setMobileMenuOpen(false)
+                }}
+                className={currentPage === "api" ? "active" : ""}
+              >
                 <Code className="icon" size={18} />
                 {translations.api}
               </button>
             </div>
-            {windowWidth > 400 && (
-              <div className="config-nav">
-                <div className="gmt-indicator">
-                  <Clock className="icon" />
-                  <span>{userGMT}</span>
-                </div>
-                <div className="language-selector">
-                  <button className="selected-language" onClick={() => setShowLanguages(!showLanguages)}>
-                    <Globe className="icon" />
-                    <span>{languages[language]}</span>
-                  </button>
-                  {showLanguages && (
-                    <div className="language-options">
-                      {Object.entries(languages).map(([code, name]) => (
-                        <button
-                          key={code}
-                          className="option"
-                          onClick={() => {
-                            setLanguage(code as "en" | "es" | "pt")
-                            setShowLanguages(false)
-                          }}
-                        >
-                          {name}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+            <div className="config-nav">
+              <div className="gmt-indicator">
+                <Clock className="icon" />
+                <span>{userGMT}</span>
               </div>
-            )}
+              <div className="language-selector">
+                <button className="selected-language" onClick={() => setShowLanguages(!showLanguages)}>
+                  <Globe className="icon" />
+                  <span>{languages[language]}</span>
+                </button>
+                {showLanguages && (
+                  <div className="language-options">
+                    {Object.entries(languages).map(([code, name]) => (
+                      <button
+                        key={code}
+                        className="option"
+                        onClick={() => {
+                          setLanguage(code as "en" | "es" | "pt")
+                          setShowLanguages(false)
+                          setMobileMenuOpen(false)
+                        }}
+                      >
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </nav>
+          <button className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
-        {windowWidth <= 400 && (
-          <div className="config-nav">
-            <div className="gmt-indicator">
-              <Clock className="icon" />
-              <span>{userGMT}</span>
-            </div>
-            <div className="language-selector">
-              <button className="selected-language" onClick={() => setShowLanguages(!showLanguages)}>
-                <Globe className="icon" />
-                <span>{languages[language]}</span>
-              </button>
-              {showLanguages && (
-                <div className="language-options">
-                  {Object.entries(languages).map(([code, name]) => (
-                    <button
-                      key={code}
-                      className="option"
-                      onClick={() => {
-                        setLanguage(code as "en" | "es" | "pt")
-                        setShowLanguages(false)
-                      }}
-                    >
-                      {name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </header>
   )

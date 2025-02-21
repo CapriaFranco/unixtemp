@@ -1,0 +1,71 @@
+/* Description Styles */
+.description {
+    width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+  
+    h2 {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+  
+    p {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+  
+    h3 {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--primary-color);
+      margin: 1.5rem 0 1rem;
+    }
+  
+    ul {
+      list-style: none;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+  
+      li {
+        font-size: clamp(0.875rem, 2vw, 1rem);
+        margin-bottom: 0.75rem;
+        position: relative;
+  
+        &:before {
+          content: "";
+          position: absolute;
+          left: -1rem;
+          top: 0.5rem;
+          width: 6px;
+          height: 6px;
+          background-color: var(--primary-color);
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+
+  .time-units-table {
+    width: 100%;
+    margin: 1rem 0 2rem;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+  
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  
+    th {
+      font-weight: 600;
+      color: var(--primary-color);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }

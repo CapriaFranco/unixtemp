@@ -8,7 +8,8 @@ import DocsPage from "./pages/DocsPage"
 import Footer from "./components/Footer"
 import { getStoredLanguage, setStoredLanguage } from "./utils/storage"
 import { detectUserGMT } from "./utils/regions"
-import "./style.scss"
+//import "./style.scss"
+import "./sass/style.scss"
 // Añadir el import para la nueva página de API
 import ApiPage from "./pages/ApiPage"
 

@@ -15,16 +15,16 @@ const Examples: React.FC<ExamplesProps> = ({ language, setCurrentPage, setCurren
       learnMore: "Learn more",
       examples: [
         {
+          title: "Discord",
+          icon: MessageSquare,
+          path: "discord",
+          description: "Create dynamic timestamps in Discord messages using Unix time.",
+        },
+        {
           title: "JavaScript",
           icon: Code,
           path: "javascript",
           description: "Learn how to work with Unix time in JavaScript and Node.js applications.",
-        },
-        {
-          title: "Python",
-          icon: Terminal,
-          path: "python",
-          description: "Discover Unix time manipulation techniques in Python programming.",
         },
         {
           title: "Java",
@@ -33,10 +33,10 @@ const Examples: React.FC<ExamplesProps> = ({ language, setCurrentPage, setCurren
           description: "Explore Unix time operations and best practices in Java development.",
         },
         {
-          title: "Discord",
-          icon: MessageSquare,
-          path: "discord",
-          description: "Create dynamic timestamps in Discord messages using Unix time.",
+          title: "Python",
+          icon: Terminal,
+          path: "python",
+          description: "Discover Unix time manipulation techniques in Python programming.",
         },
       ],
     },
